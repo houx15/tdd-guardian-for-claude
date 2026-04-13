@@ -1,0 +1,17 @@
+{
+  "name": "tdd-guardian",
+  "version": "0.7.0",
+  "description": "TDD Guardian — enforces strict test-driven development discipline with quality gates, coverage enforcement, and mutation testing. Works with Claude Code, OpenCode, and Codex CLI.",
+  "author": {
+    "name": "xiaolai"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tdd",
+    "testing",
+    "coverage",
+    "mutation-testing",
+    "quality-gates"
+  ],
+  "skills": "./skills/"
+}

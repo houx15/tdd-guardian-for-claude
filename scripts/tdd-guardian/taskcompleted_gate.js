@@ -146,6 +146,17 @@ function block(reason, context) {
   );
 }
 
+function resolvePaths(cwd) {
+  const candidates = [
+    { config: path.join(cwd, ".claude", "tdd-guardian", "config.json"), state: path.join(cwd, ".claude", "tdd-guardian", "state.json") },
+    { config: path.join(cwd, ".opencode", "tdd-guardian", "config.json"), state: path.join(cwd, ".opencode", "tdd-guardian", "state.json") },
+  ];
+  for (const { config, state } of candidates) {
+    if (loadJson(config)) return { config, state };
+  }
+  return candidates[0];
+}
+
 function main() {
   let raw = "";
   try {
@@ -162,8 +173,7 @@ function main() {
   }
 
   const cwd = payload.cwd || process.cwd();
-  const configPath = path.join(cwd, ".claude", "tdd-guardian", "config.json");
-  const statePath = path.join(cwd, ".claude", "tdd-guardian", "state.json");
+  const { config: configPath, state: statePath } = resolvePaths(cwd);
 
   const config = loadJson(configPath) || {};
   if (!config.enabled) return;
@@ -221,7 +231,7 @@ function main() {
     if (!mutationCommand) {
       block(
         "Mutation gate enabled but mutationCommand is missing",
-        "Set mutationCommand in .claude/tdd-guardian/config.json"
+        "Set mutationCommand in .claude/tdd-guardian/config.json or .opencode/tdd-guardian/config.json"
       );
       return;
     }

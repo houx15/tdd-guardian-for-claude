@@ -5,7 +5,9 @@ description: Initialize workspace TDD Guardian config and enable strict hooks fo
 
 # Initialize TDD Guardian
 
-Create `.claude/tdd-guardian/config.json` using project-appropriate commands.
+Create TDD Guardian config using project-appropriate commands.
+
+Config is written to `.claude/tdd-guardian/config.json` (Claude Code) or `.opencode/tdd-guardian/config.json` (OpenCode/Codex CLI). Detect the active agent and write to the appropriate path.
 
 ## Steps
 

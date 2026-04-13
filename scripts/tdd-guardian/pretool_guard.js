@@ -71,6 +71,17 @@ function hasSourceChangedSince(sha, cwd) {
   }
 }
 
+function resolvePaths(cwd) {
+  const candidates = [
+    { config: path.join(cwd, ".claude", "tdd-guardian", "config.json"), state: path.join(cwd, ".claude", "tdd-guardian", "state.json") },
+    { config: path.join(cwd, ".opencode", "tdd-guardian", "config.json"), state: path.join(cwd, ".opencode", "tdd-guardian", "state.json") },
+  ];
+  for (const { config, state } of candidates) {
+    if (loadJson(config)) return { config, state };
+  }
+  return candidates[0];
+}
+
 function main() {
   let raw = "";
   try {
@@ -96,8 +107,7 @@ function main() {
   if (!BLOCK_PATTERNS.some((p) => p.test(command))) return;
 
   const cwd = payload.cwd || process.cwd();
-  const configPath = path.join(cwd, ".claude", "tdd-guardian", "config.json");
-  const statePath = path.join(cwd, ".claude", "tdd-guardian", "state.json");
+  const { config: configPath, state: statePath } = resolvePaths(cwd);
 
   const config = loadJson(configPath);
   if (!config || !config.enabled) {
