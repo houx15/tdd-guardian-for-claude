@@ -1,22 +1,36 @@
 # tdd-guardian
 
-TDD Guardian plugin for Claude Code. Enforces strict test-driven development with automated quality gates.
+TDD Guardian plugin for Claude Code, OpenCode, and Codex CLI. Enforces strict test-driven development with automated quality gates.
+
+## Cross-platform support
+
+This plugin works across multiple AI coding assistants:
+
+| Platform | Plugin manifest | Config path | Skill discovery |
+|----------|----------------|-------------|-----------------|
+| **Claude Code** | `.claude-plugin/plugin.json` | `.claude/tdd-guardian/config.json` | `.claude-plugin/` hooks + `skills/` |
+| **Codex CLI** | `.codex-plugin/plugin.json` | `.opencode/tdd-guardian/config.json` | `skills/*/SKILL.md` |
+| **OpenCode** | (uses skill standard) | `.opencode/tdd-guardian/config.json` | `skills/*/SKILL.md` |
+
+Hook scripts search both `.claude/tdd-guardian/` and `.opencode/tdd-guardian/` for config, using whichever exists.
 
 ## Project structure
 
 ```
 .claude-plugin/
-  plugin.json             Plugin metadata
+  plugin.json             Claude Code plugin metadata
+.codex-plugin/
+  plugin.json             Codex CLI plugin metadata
 hooks/
-  hooks.json              Hook registration (auto-discovered by Claude Code)
-agents/                   Specialized subagents for TDD workflow
+  hooks.json              Hook registration (Claude Code auto-discovery)
+agents/                   Specialized subagents for TDD workflow (Claude Code)
   tdd-planner.md          Work item planning
   tdd-test-designer.md    Behavior-driven test design
   tdd-implementer.md      Small-batch implementation
   tdd-coverage-auditor.md Coverage gate enforcement
   tdd-mutation-auditor.md Mutation testing
   tdd-reviewer.md         Final code + test quality review
-commands/                 Slash command definitions
+commands/                 Slash command definitions (Claude Code)
   tdd-guardian-init.md    /init — initialize config
   tdd-guardian-workflow.md /workflow — full TDD orchestration
 config/
@@ -25,7 +39,7 @@ scripts/
   tdd-guardian/
     pretool_guard.js      PreToolUse hook — blocks commits without fresh gates
     taskcompleted_gate.js TaskCompleted hook — runs gates on task completion
-skills/
+skills/                   Cross-platform skills (SKILL.md format)
   tdd-guardian/
     init/                 Workspace initialization
     workflow/             TDD workflow orchestration
@@ -44,11 +58,11 @@ All tests must have at least one Level 1-5 (behavior) assertion. Tests with only
 
 ### Hook scripts
 
-- Hooks are registered via `hooks/hooks.json` using `${CLAUDE_PLUGIN_ROOT}` paths
+- Hooks are registered via `hooks/hooks.json` using `${CLAUDE_PLUGIN_ROOT}` paths (Claude Code)
 - `pretool_guard.js` intercepts Bash tool calls matching commit/push/publish patterns
 - `taskcompleted_gate.js` runs test/coverage/mutation gates on task completion
-- Both read config from `.claude/tdd-guardian/config.json` in the project workspace
-- Gate freshness state is written to `.claude/tdd-guardian/state.json`
+- Both search for config in `.claude/tdd-guardian/` first, then `.opencode/tdd-guardian/`
+- Gate freshness state is written alongside the config file as `state.json`
 
 ### Adding new skills
 

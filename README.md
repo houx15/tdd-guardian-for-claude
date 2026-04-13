@@ -1,22 +1,20 @@
 # tdd-guardian
 
-TDD Guardian for Claude Code — enforces strict test-driven development discipline with automated quality gates.
+TDD Guardian — enforces strict test-driven development discipline with automated quality gates. Works with **Claude Code**, **OpenCode**, and **Codex CLI**.
 
 ## What it does
 
-TDD Guardian ensures Claude Code follows rigorous TDD practices:
+TDD Guardian ensures your AI coding assistant follows rigorous TDD practices:
 
 - **Test-first workflow**: tests are written before or alongside implementation, never after
 - **Coverage gates**: blocks commits when coverage drops below thresholds (default: 100% lines/functions/branches/statements)
 - **Mutation testing**: validates test strength by catching surviving mutants (optional)
 - **Behavior-driven test quality**: rejects wiring-only tests that assert mock calls without verifying observable behavior
-- **Pre-commit enforcement**: hooks block `git commit`, `git push`, and `gh pr create` until all gates pass
-
-Part of the [xiaolai plugin marketplace](https://github.com/xiaolai/claude-plugin-marketplace).
+- **Pre-commit enforcement**: hooks block `git commit`, `git push`, and `gh pr create` until all gates pass (Claude Code)
 
 ## Installation
 
-### Install the plugin
+### Claude Code
 
 Add the marketplace (once):
 
@@ -36,16 +34,44 @@ Then install:
 | **Project** | `/plugin install tdd-guardian@xiaolai --scope project` | Shared with team via `.claude/settings.json` |
 | **Local** | `/plugin install tdd-guardian@xiaolai --scope local` | Only you, only this repo |
 
+### Codex CLI
+
+Install as a plugin from this repo:
+
+```
+codex plugin add houx15/tdd-guardian-for-claude
+```
+
+Or manually symlink the skills:
+
+```bash
+ln -s /path/to/tdd-guardian-for-claude/skills/tdd-guardian ~/.codex/skills/tdd-guardian
+```
+
+### OpenCode
+
+Symlink the skills to your OpenCode skills directory:
+
+```bash
+for skill in /path/to/tdd-guardian-for-claude/skills/tdd-guardian/*/; do
+  ln -s "$skill" ~/.config/opencode/skills/tdd-guardian-$(basename "$skill")
+done
+```
+
 ### Initialize for your project
 
-Run `/tdd-guardian:init` inside your project to generate `.claude/tdd-guardian/config.json`. This auto-detects your stack and configures test/coverage commands.
+**Claude Code**: Run `/tdd-guardian:init` inside your project.
+
+**Codex CLI / OpenCode**: Load the `init` skill and follow the setup instructions. This generates config at `.claude/tdd-guardian/config.json` (Claude Code) or `.opencode/tdd-guardian/config.json` (OpenCode/Codex CLI).
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `/tdd-guardian:init` | Initialize TDD Guardian config for the current project |
-| `/tdd-guardian:workflow` | Run the full TDD workflow with specialized subagents |
+| Command | Platform | Description |
+|---------|----------|-------------|
+| `/tdd-guardian:init` | Claude Code | Initialize TDD Guardian config for the current project |
+| `/tdd-guardian:workflow` | Claude Code | Run the full TDD workflow with specialized subagents |
+| `skill(name="tdd-guardian-init")` | OpenCode | Initialize config |
+| `skill(name="tdd-guardian-workflow")` | OpenCode/Codex | Run the full TDD workflow |
 
 ## How it works
 
@@ -89,7 +115,7 @@ Tests with only Level 6-7 assertions are flagged and must be upgraded.
 
 ## Configuration
 
-Config lives at `.claude/tdd-guardian/config.json`:
+Config lives at `.claude/tdd-guardian/config.json` (Claude Code) or `.opencode/tdd-guardian/config.json` (OpenCode/Codex CLI):
 
 ```json
 {
@@ -140,9 +166,11 @@ TDD_GUARD_BYPASS=1 claude
 
 ```
 .claude-plugin/
-  plugin.json             Plugin metadata
+  plugin.json             Claude Code plugin metadata
+.codex-plugin/
+  plugin.json             Codex CLI plugin metadata
 hooks/
-  hooks.json              Hook registration (auto-discovered by Claude Code)
+  hooks.json              Hook registration (Claude Code auto-discovery)
 agents/
   tdd-planner.md          Work item planning specialist
   tdd-test-designer.md    Behavior-driven test design specialist
