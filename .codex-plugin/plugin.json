@@ -5,22 +5,36 @@
   "author": {
     "name": "xiaolai"
   },
+  "homepage": "https://github.com/houx15/tdd-guardian-for-claude",
+  "repository": "https://github.com/houx15/tdd-guardian-for-claude",
   "license": "MIT",
   "keywords": [
     "tdd",
     "testing",
     "coverage",
     "mutation-testing",
-    "quality-gates"
+    "quality-gates",
+    "test-first",
+    "behavior-driven"
   ],
   "skills": "./skills/tdd-guardian/",
   "interface": {
     "displayName": "TDD Guardian",
-    "shortDescription": "Enforces strict test-driven development discipline with quality gates",
+    "shortDescription": "Enforces strict test-driven development discipline with quality gates, coverage enforcement, and mutation testing",
+    "longDescription": "TDD Guardian ensures rigorous test-driven development practices: test-first workflow enforcement, coverage gates (100% lines, functions, branches, statements), mutation testing for validating test strength, and behavior-driven test quality validation. Works across Claude Code, OpenCode, and Codex CLI.",
+    "developerName": "xiaolai",
     "category": "Developer Tools",
     "capabilities": [
-      "testing",
-      "code-quality"
-    ]
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Initialize TDD Guardian for this project",
+      "Run the full TDD workflow for my feature"
+    ],
+    "brandColor": "#10B981",
+    "composerIcon": "./assets/composer-icon.svg",
+    "logo": "./assets/logo.png",
+    "screenshots": []
   }
 }
