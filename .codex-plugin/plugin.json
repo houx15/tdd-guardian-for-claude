@@ -13,5 +13,14 @@
     "mutation-testing",
     "quality-gates"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/tdd-guardian/",
+  "interface": {
+    "displayName": "TDD Guardian",
+    "shortDescription": "Enforces strict test-driven development discipline with quality gates",
+    "category": "Developer Tools",
+    "capabilities": [
+      "testing",
+      "code-quality"
+    ]
+  }
 }
